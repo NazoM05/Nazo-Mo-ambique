@@ -10,7 +10,7 @@ import jakarta.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class produto {
+public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -51,7 +51,7 @@ public class produto {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	public produto(Long id, String nome, String tamanho, float preco, String tipo) {
+	public Produto(Long id, String nome, String tamanho, float preco, String tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -59,7 +59,7 @@ public class produto {
 		this.preco = preco;
 		this.tipo = tipo;
 	}
-	public produto() {
+	public Produto() {
 	}
 	
 
