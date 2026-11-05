@@ -21,6 +21,7 @@ public class Produto {
 	private String tamanho;
 	private float preco;
 	private String tipo;
+	private String imagem; // nome do arquivo em static/img (ex.: camisa-militar.svg)
 	public Long getId() {
 		return id;
 	}
@@ -50,6 +51,12 @@ public class Produto {
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public String getImagem() {
+		return imagem;
+	}
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 	public Produto(Long id, String nome, String tamanho, float preco, String tipo) {
 		super();
