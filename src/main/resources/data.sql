@@ -1,3 +1,26 @@
-INSERT INTO produto (nome, tamanho, preco, tipo)
-VALUES 
-    ('Camisa Militar', 'GG', 24.90, 'Algodão');
+INSERT INTO produto (nome, tamanho, preco, tipo, imagem)
+VALUES
+    ('Camisa Militar', 'GG', 24.90, 'Algodão', 'camisa-militar.svg'),
+    ('Camisa Polo Listrada', 'M', 39.90, 'Algodão', 'camisa-polo-listrada.svg'),
+    ('Camiseta Básica Branca', 'G', 19.90, 'Algodão', 'camiseta-basica-branca.svg'),
+    ('Camiseta Estampa Floral', 'P', 29.90, 'Malha', 'camiseta-estampa-floral.svg'),
+    ('Camiseta Oversized Preta', 'GG', 44.90, 'Algodão', 'camiseta-oversized-preta.svg'),
+    ('Regata Fitness', 'M', 22.90, 'Poliéster', 'regata-fitness.svg'),
+    ('Blusa de Moletom Cinza', 'G', 69.90, 'Moletom', 'blusa-de-moletom-cinza.svg'),
+    ('Moletom com Capuz Rosa', 'M', 84.90, 'Moletom', 'moletom-com-capuz-rosa.svg'),
+    ('Jaqueta Jeans', 'G', 119.90, 'Jeans', 'jaqueta-jeans.svg'),
+    ('Jaqueta Corta-Vento', 'M', 89.90, 'Poliéster', 'jaqueta-corta-vento.svg'),
+    ('Calça Jeans Skinny', '38', 99.90, 'Jeans', 'calca-jeans-skinny.svg'),
+    ('Calça Jeans Reta', '42', 109.90, 'Jeans', 'calca-jeans-reta.svg'),
+    ('Calça Jogger', 'M', 59.90, 'Moletom', 'calca-jogger.svg'),
+    ('Calça Alfaiataria Preta', '40', 94.90, 'Viscose', 'calca-alfaiataria-preta.svg'),
+    ('Bermuda Cargo', '42', 54.90, 'Sarja', 'bermuda-cargo.svg'),
+    ('Bermuda Jeans', '40', 49.90, 'Jeans', 'bermuda-jeans.svg'),
+    ('Short Saia Plissado', 'P', 34.90, 'Poliéster', 'short-saia-plissado.svg'),
+    ('Saia Midi Floral', 'M', 57.90, 'Viscose', 'saia-midi-floral.svg'),
+    ('Vestido Midi Rosa', 'M', 79.90, 'Viscose', 'vestido-midi-rosa.svg'),
+    ('Vestido Curto Listrado', 'P', 64.90, 'Malha', 'vestido-curto-listrado.svg'),
+    ('Cropped Canelado', 'P', 27.90, 'Canelado', 'cropped-canelado.svg'),
+    ('Cardigan de Tricô', 'G', 74.90, 'Tricô', 'cardigan-de-trico.svg'),
+    ('Camisa Social Branca', 'M', 64.90, 'Algodão', 'camisa-social-branca.svg'),
+    ('Camisa Xadrez Flanela', 'G', 52.90, 'Flanela', 'camisa-xadrez-flanela.svg');

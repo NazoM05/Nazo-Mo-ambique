@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS da página principal (mantido) + complemento só da página de detalhes -->
+    <link rel="stylesheet" th:href="@{/homecss.css(v=4)}">
+    <link rel="stylesheet" th:href="@{/detalhescss.css(v=4)}">
+
+    <title>Detalhes do produto - Estilo London Store</title>
+
+    <link rel="icon" type="image/png" href="/Gemini_Generated_Image_kujj8zkujj8zkujj-removebg-preview.png">
+</head>
+
+
+<body>
+
+    <!-- Barra de anúncios (a mesma da home) -->
+    <div th:replace="~{fragments/anuncios :: anuncios}"></div>
+
+    <!-- Mesma barra branca da home -->
+    <div class="barrabranca">
+        <button class="menu-btn" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <form class="search-form" action="#" method="get">
+            <input type="text" name="search" placeholder="Pesquisar...">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <main class="detalhes-container"
+          th:with="foto=${produto.imagem != null} ? @{'/img/' + ${produto.imagem}} : 'https://placehold.co/400x500/ffb6c1/ffffff?text=Sem+foto'">
+
+        <!-- Voltar / caminho -->
+        <nav class="detalhes-voltar">
+            <a th:href="@{/}">Voltar</a>
+            <span>›</span>
+            <span>Roupas</span>
+            <span>›</span>
+            <span th:text="${produto.nome}">Produto</span>
+        </nav>
+
+        <section class="detalhes-box">
+
+            <!-- Miniaturas -->
+            <div class="detalhes-miniaturas">
+                <img class="ativa" th:src="${foto}" alt="Foto 1">
+                <img th:src="${foto}" alt="Foto 2">
+                <img th:src="${foto}" alt="Foto 3">
+                <img th:src="${foto}" alt="Foto 4">
+            </div>
+
+            <!-- Imagem principal -->
+            <div class="detalhes-imagem">
+                <img id="imagemPrincipal" th:src="${foto}"
+                     th:alt="${produto.nome}" alt="Produto">
+            </div>
+
+            <!-- Informações -->
+            <div class="detalhes-info">
+                <p class="detalhes-status">Novo | +100 vendidos</p>
+
+                <h1 class="detalhes-titulo" th:text="${produto.nome}">Nome do produto</h1>
+
+                <p class="detalhes-avaliacao">4.9 ★★★★★ (120)</p>
+
+                <p class="preco-antigo">R$ 199,90</p>
+                <p class="preco detalhes-preco" th:text="${produto.preco}">R$ 0,00</p>
+                <p class="detalhes-pagamento">ou em até 3x sem juros</p>
+
+                <p class="detalhes-opcao">Cor: <strong>Rosa</strong></p>
+
+                <p class="detalhes-opcao">Tamanho:</p>
+                <div class="detalhes-tamanhos">
+                    <button type="button">P</button>
+                    <button type="button" class="ativo">M</button>
+                    <button type="button">G</button>
+                    <button type="button">GG</button>
+                </div>
+
+                <h2 class="detalhes-subtitulo">O que você precisa saber sobre este produto</h2>
+                <ul class="detalhes-lista">
+                    <li>Tecido macio e confortável.</li>
+                    <li>Modelagem que veste bem no dia a dia.</li>
+                    <li>Lavagem fácil.</li>
+                </ul>
+            </div>
+
+            <!-- Caixa de compra -->
+            <aside class="detalhes-compra">
+                <p class="detalhes-frete"><strong>Frete grátis</strong> acima de R$ 99</p>
+                <p>Chegará em poucos dias úteis.</p>
+
+                <p class="detalhes-estoque">Estoque disponível</p>
+
+                <label for="quantidade">Quantidade:</label>
+                <select id="quantidade">
+                    <option>1 unidade</option>
+                    <option>2 unidades</option>
+                    <option>3 unidades</option>
+                </select>
+
+                <button type="button" class="btn-comprar">Comprar agora</button>
+                <button type="button" class="btn-comprar btn-secundario">Adicionar ao carrinho</button>
+
+                <p class="detalhes-vendedor">Vendido por <strong>Estilo London Store</strong></p>
+            </aside>
+
+        </section>
+    </main>
+
+    <!-- Mesma sidebar e overlay da home -->
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <a th:href="@{/}">Início</a>
+            <a href="#">Perfil</a>
+            <a href="#">Configurações</a>
+            <a href="#">Sair</a>
+        </nav>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <script th:src="@{/jshome.js(v=4)}"></script>
+
+    <!-- Troca a imagem principal ao clicar numa miniatura -->
+    <script>
+        document.querySelectorAll('.detalhes-miniaturas img').forEach(function (mini) {
+            mini.addEventListener('click', function () {
+                document.getElementById('imagemPrincipal').src = mini.src;
+                document.querySelectorAll('.detalhes-miniaturas img').forEach(function (i) {
+                    i.classList.remove('ativa');
+                });
+                mini.classList.add('ativa');
+            });
+        });
+        document.querySelectorAll('.detalhes-tamanhos button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.detalhes-tamanhos button').forEach(function (b) {
+                    b.classList.remove('ativo');
+                });
+                btn.classList.add('ativo');
+            });
+        });
+    </script>
+
+</body>
+
+</html>
