@@ -23,6 +23,11 @@ public class ProdutoService {
     public List<Produto> listarTodos() {
         return produtoRepository.findAll();
     }
+    
+    public Produto buscarPorId(Long id) {
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto com ID " + id + " não encontrado."));
+    }
 
     public Produto salvarProduto(Produto produto) {
         if (produto.getPreco() < 0) {

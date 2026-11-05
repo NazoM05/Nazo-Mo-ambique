@@ -36,3 +36,32 @@ produtos.forEach(produto => {
 searchForm.addEventListener('submit', function(event) {
 event.preventDefault();
 });
+
+// ===== Barra de anúncios: troca a mensagem a cada 4 segundos =====
+(function () {
+    const mensagens = document.querySelectorAll('.barra-anuncios .anuncio');
+    const barra = document.querySelector('.barra-anuncios');
+    if (!barra || mensagens.length < 2) return;
+
+    let atual = 0;
+    let timer = null;
+
+    mensagens.forEach(function (m, i) {
+        m.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+    });
+
+    function proxima() {
+        mensagens[atual].classList.remove('ativo');
+        mensagens[atual].setAttribute('aria-hidden', 'true');
+        atual = (atual + 1) % mensagens.length;
+        mensagens[atual].classList.add('ativo');
+        mensagens[atual].setAttribute('aria-hidden', 'false');
+    }
+
+    function iniciar() { timer = setInterval(proxima, 4000); }
+    function pausar() { clearInterval(timer); }
+
+    barra.addEventListener('mouseenter', pausar);
+    barra.addEventListener('mouseleave', iniciar);
+    iniciar();
+})();
