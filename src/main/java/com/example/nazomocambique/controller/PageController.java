@@ -36,7 +36,12 @@ public class PageController {
 
 	@GetMapping("/detalhes/{id}")
 	public String detalhes(@PathVariable Long id, Model model) {
-		model.addAttribute("produto", produtoService.buscarPorId(id));
+		try {
+			model.addAttribute("produto", produtoService.buscarPorId(id));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "detalhes";
 	}
 }

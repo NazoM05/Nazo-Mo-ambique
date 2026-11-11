@@ -1,3 +1,4 @@
+
 package com.example.nazomocambique.service;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
     
-    public Produto buscarPorId(Long id) {
+    public Produto buscarPorId(Long id) throws Exception {
         return produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new Exception("Produto com ID " + id + " não encontrado."));
     }
 
     public Produto salvarProduto(Produto produto) {
