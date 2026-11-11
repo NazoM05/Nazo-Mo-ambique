@@ -7,8 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Produto {
 	@Id
@@ -18,55 +22,27 @@ public class Produto {
 	@Column(unique = true)
 	
 	private String nome;
+	private String cor;
+	private boolean status;
 	private String tamanho;
 	private float preco;
 	private String tipo;
 	private String imagem; // nome do arquivo em static/img (ex.: camisa-militar.svg)
-	public Long getId() {
-		return id;
+	
+	public Produto() {
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public String getTamanho() {
-		return tamanho;
-	}
-	public void setTamanho(String tamanho) {
-		this.tamanho = tamanho;
-	}
-	public float getPreco() {
-		return preco;
-	}
-	public void setPreco(float preco) {
-		this.preco = preco;
-	}
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-	public String getImagem() {
-		return imagem;
-	}
-	public void setImagem(String imagem) {
-		this.imagem = imagem;
-	}
-	public Produto(Long id, String nome, String tamanho, float preco, String tipo) {
+
+	public Produto(Long id, String nome, String cor, boolean status, String tamanho, float preco, String tipo,
+			String imagem) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.cor = cor;
+		this.status = status;
 		this.tamanho = tamanho;
 		this.preco = preco;
 		this.tipo = tipo;
-	}
-	public Produto() {
+		this.imagem = imagem;
 	}
 	
 
