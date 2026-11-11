@@ -1,0 +1,132 @@
+
+
+.admin-container {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px 48px;
+}
+
+.admin-form-box {
+    background: #fff;
+    border: 1px solid #f3d3da;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 32px;
+}
+
+.admin-form-box h2,
+.admin-titulo h2 {
+    margin: 0 0 16px;
+    font-size: 1.25rem;
+}
+
+.admin-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.campo input[type="text"],
+.campo input[type="number"],
+.campo input[type="file"] {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fff;
+}
+
+.campo input:focus-visible {
+    outline: 2px solid #ffb6c1;
+    outline-offset: 1px;
+}
+
+.campo-imagem,
+.btn-salvar {
+    grid-column: 1 / -1;
+}
+
+.previa {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #f3d3da;
+}
+
+.btn-salvar {
+    justify-self: start;
+    cursor: pointer;
+}
+
+.admin-titulo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.contador {
+    font-size: .9rem;
+    color: #777;
+}
+
+.vazio {
+    padding: 24px;
+    text-align: center;
+    color: #777;
+    border: 1px dashed #f3d3da;
+    border-radius: 12px;
+}
+
+.acoes-card {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.acoes-card a.btn-comprar {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-excluir {
+    padding: 8px 14px;
+    border: 1px solid #c0392b;
+    background: #fff;
+    color: #c0392b;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-excluir:hover,
+.btn-excluir:focus-visible {
+    background: #c0392b;
+    color: #fff;
+}
+
+.alerta {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.alerta-ok   { background: #e8f7ee; color: #1e7a45; }
+.alerta-erro { background: #fdecea; color: #b03a2e; }
+
+@media (max-width: 600px) {
+    .admin-form { grid-template-columns: 1fr; }
+}

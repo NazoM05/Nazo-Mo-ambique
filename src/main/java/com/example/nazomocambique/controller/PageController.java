@@ -25,6 +25,12 @@ public class PageController {
 		return "home";
 	}
   
+	@GetMapping({"/cadastroprod"})
+	public String cadastrar(Model model) {
+		model.addAttribute("listaProdutos", produtoService.listarTodos());
+		return "cadastroprod";
+	}
+	
   @GetMapping({"/pesquisa"})
   public String pesquisa(@RequestParam Optional<String> p, Model model) {
     if(p.isPresent()) {
@@ -39,4 +45,6 @@ public class PageController {
 		model.addAttribute("produto", produtoService.buscarPorId(id));
 		return "detalhes";
 	}
+	
+	
 }
