@@ -6,9 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS da página principal (mantido) + complemento só da página de detalhes -->
-    <link rel="stylesheet" th:href="@{/homecss.css(v=4)}">
-    <link rel="stylesheet" th:href="@{/detalhescss.css(v=4)}">
+    <!-- CSS global único do site -->
+    <link rel="stylesheet" th:href="@{/global.css(v=1)}">
 
     <title>Detalhes do produto - Estilo London Store</title>
 
@@ -46,7 +45,9 @@
             <span th:text="${produto.nome}">Produto</span>
         </nav>
 
-        <section class="detalhes-box">
+        <!-- --cor-produto vem da coluna "cor" (null/desconhecida => cinza neutro definido no CSS) -->
+        <section class="detalhes-box"
+                 th:style="${produto.corCss != null} ? |--cor-produto: ${produto.corCss}|">
 
             <!-- Miniaturas -->
             <div class="detalhes-miniaturas">
@@ -74,7 +75,11 @@
                 <p class="preco detalhes-preco" th:text="${produto.preco}">R$ 0,00</p>
                 <p class="detalhes-pagamento">ou em até 3x sem juros</p>
 
-                <p class="detalhes-opcao">Cor: <strong>Rosa</strong></p>
+                <p class="detalhes-opcao detalhes-cor">
+                    Cor:
+                    <span class="detalhes-cor-amostra" aria-hidden="true"></span>
+                    <strong th:text="${produto.cor != null and !#strings.isEmpty(#strings.trim(produto.cor))} ? ${produto.cor} : 'Não informada'">Rosa</strong>
+                </p>
 
                 <p class="detalhes-opcao">Tamanho:</p>
                 <div class="detalhes-tamanhos">

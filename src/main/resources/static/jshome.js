@@ -15,7 +15,7 @@ const searchForm = document.querySelector('.search-form');
 
 const produtos = document.querySelectorAll('.produto-card');
 
-searchInput.addEventListener('input', function() {
+if (searchInput) searchInput.addEventListener('input', function() {
 
 const termoBusca = searchInput.value.toLowerCase();
 
@@ -33,7 +33,7 @@ produtos.forEach(produto => {
 });
 });
 
-searchForm.addEventListener('submit', function(event) {
+if (searchForm) searchForm.addEventListener('submit', function(event) {
 event.preventDefault();
 });
 
