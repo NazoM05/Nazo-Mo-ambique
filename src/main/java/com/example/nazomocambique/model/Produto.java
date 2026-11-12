@@ -1,5 +1,7 @@
 package com.example.nazomocambique.model;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -91,5 +93,17 @@ public class Produto {
 			return chave;
 		}
 		return CORES_CSS.get(chave);
+	}
+
+	/**
+	 * Tamanhos disponíveis do produto. O campo "tamanho" guarda os tamanhos separados por vírgula
+	 * (ex.: "P,M,G"); este método devolve a lista pronta para a tela.
+	 */
+	@Transient
+	public List<String> getTamanhosDisponiveis() {
+		if (tamanho == null || tamanho.isBlank()) {
+			return List.of();
+		}
+		return Arrays.stream(tamanho.split(",")).map(String::trim).filter(t -> !t.isEmpty()).toList();
 	}
 }

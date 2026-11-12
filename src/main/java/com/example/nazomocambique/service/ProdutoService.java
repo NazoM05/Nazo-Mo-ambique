@@ -2,9 +2,7 @@
 package com.example.nazomocambique.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.example.nazomocambique.model.Produto;

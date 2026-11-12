@@ -1,0 +1,379 @@
+/* =====================================================================
+   admin.css — layout e usabilidade das telas de administração de produtos
+   (listar, cadastrar, editar). Carregar DEPOIS de global.css.
+
+   Tudo é escopado em .admin-ui (classe do <body>), então não afeta a home.
+   Não define cores novas: usa as cores que o site já tem (global.css) e
+   apenas neutros (branco e preto com transparência).
+   ===================================================================== */
+
+.admin-ui {
+  --adm-raio: 14px;
+  --adm-raio-pq: 10px;
+  --adm-linha: rgba(0, 0, 0, .10);
+  --adm-linha-forte: rgba(0, 0, 0, .28);
+  --adm-suave: rgba(0, 0, 0, .04);
+  --adm-sombra: 0 1px 2px rgba(0, 0, 0, .06), 0 8px 24px rgba(0, 0, 0, .06);
+}
+
+/* ---------- Estrutura da página ---------- */
+.admin-ui .listagem-container,
+.admin-ui .cadastro-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 20px 72px;
+  box-sizing: border-box;
+}
+
+.admin-ui .adm-topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.admin-ui .adm-titulo { margin: 0; font-size: 1.75rem; line-height: 1.2; }
+.admin-ui .adm-sub { margin: 4px 0 0; opacity: .7; }
+
+.admin-ui .adm-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+  color: inherit;
+  text-decoration: none;
+  opacity: .75;
+  font-size: .95rem;
+}
+.admin-ui .adm-voltar svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.admin-ui .adm-voltar:hover { opacity: 1; text-decoration: underline; }
+
+/* ---------- Botões ---------- */
+.admin-ui .adm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  width: auto;
+  box-sizing: border-box;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.admin-ui .adm-btn:hover { transform: translateY(-1px); }
+.admin-ui .adm-btn-sec {
+  background: transparent;
+  color: inherit;
+  border: 1.5px solid var(--adm-linha-forte);
+}
+.admin-ui .adm-btn-sec:hover { background: var(--adm-suave); }
+.admin-ui .adm-btn-pq { min-height: 36px; padding: 0 14px; font-size: .85rem; }
+.admin-ui .adm-btn:focus-visible,
+.admin-ui .listagem-icone:focus-visible,
+.admin-ui .listagem-aba:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ---------- Avisos ---------- */
+.admin-ui .cadastro-alerta {
+  border-radius: var(--adm-raio-pq);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Listagem: abas ---------- */
+.admin-ui .listagem-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.admin-ui .listagem-aba {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.admin-ui .listagem-contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Listagem: tabela ---------- */
+.admin-ui .listagem-painel {
+  background: #fff;
+  border: 1px solid var(--adm-linha);
+  border-radius: var(--adm-raio);
+  box-shadow: var(--adm-sombra);
+  overflow-x: auto;
+}
+.admin-ui .listagem-tabela { width: 100%; border-collapse: collapse; }
+.admin-ui .listagem-tabela th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: .85rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--adm-linha);
+}
+.admin-ui .listagem-tabela td { padding: 12px 16px; vertical-align: middle; }
+.admin-ui .listagem-tabela tbody tr + tr td { border-top: 1px solid var(--adm-linha); }
+.admin-ui .listagem-tabela tbody tr:hover { background: var(--adm-suave); }
+.admin-ui .listagem-col-foto { width: 88px; }
+.admin-ui .listagem-col-foto img {
+  display: block;
+  width: 56px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: var(--adm-raio-pq);
+}
+.admin-ui .listagem-col-nome { font-weight: 600; }
+.admin-ui .listagem-col-preco { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; }
+.admin-ui th.listagem-col-acoes { text-align: right; }
+.admin-ui .listagem-icones { display: flex; justify-content: flex-end; gap: 6px; }
+.admin-ui .listagem-icones form { margin: 0; }
+.admin-ui .listagem-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+.admin-ui .listagem-icone:hover { background: var(--adm-suave); transform: scale(1.06); }
+.admin-ui .listagem-icone svg { width: 20px; height: 20px; }
+.admin-ui .listagem-vazio td { padding: 44px 16px; text-align: center; opacity: .7; }
+.admin-ui .adm-sem-resultado { margin: 16px 4px 0; opacity: .75; }
+
+/* ---------- Formulários ---------- */
+.admin-ui .cadastro-form-box {
+  background: #fff;
+  border: 1px solid var(--adm-linha);
+  border-radius: var(--adm-raio);
+  box-shadow: var(--adm-sombra);
+  padding: 28px;
+  margin-bottom: 40px;
+}
+.admin-ui .cadastro-form-box h2 { margin: 0 0 22px; font-size: 1.2rem; }
+
+.admin-ui .cadastro-form {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 22px 24px;
+}
+.admin-ui .cadastro-campo { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.admin-ui .adm-c2 { grid-column: span 2; }
+.admin-ui .adm-c3 { grid-column: span 3; }
+.admin-ui .adm-c4 { grid-column: span 4; }
+.admin-ui .adm-c6 { grid-column: 1 / -1; }
+
+.admin-ui .cadastro-campo > label,
+.admin-ui .adm-rotulo { font-weight: 600; font-size: .92rem; }
+.admin-ui .adm-ajuda { margin: 0; font-size: .82rem; opacity: .7; }
+
+.admin-ui .cadastro-campo input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+.admin-ui .cadastro-campo select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  font: inherit;
+  background: #fff;
+  border: 1px solid var(--adm-linha-forte);
+  border-radius: var(--adm-raio-pq);
+  box-sizing: border-box;
+}
+.admin-ui .cadastro-campo input:focus-visible,
+.admin-ui .cadastro-campo select:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
+
+/* Campo de preço com "R$" fixo */
+.admin-ui .adm-prefixo { position: relative; }
+.admin-ui .adm-prefixo > span {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .65;
+  pointer-events: none;
+}
+.admin-ui .cadastro-campo .adm-prefixo > input { padding-left: 44px; }
+
+/* Opções em "chips" (tamanhos e situação) — o selecionado ganha borda forte, fundo e ✓ */
+.admin-ui .adm-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.admin-ui .cadastro-campo > label.adm-chip,
+.admin-ui .adm-chip { position: relative; display: inline-flex; font-weight: 500; font-size: .95rem; cursor: pointer; }
+.admin-ui .adm-chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.admin-ui .adm-chip span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 56px;
+  min-height: 42px;
+  padding: 0 18px;
+  background: #fff;
+  border: 1.5px solid var(--adm-linha-forte);
+  border-radius: 999px;
+  box-sizing: border-box;
+  user-select: none;
+  transition: background .15s ease, border-color .15s ease;
+}
+.admin-ui .adm-chip:hover span { border-color: currentColor; }
+.admin-ui .adm-chip input:checked + span {
+  border-color: currentColor;
+  background: var(--adm-suave);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.admin-ui .adm-chip input:checked + span::before { content: "\2713"; font-size: .85em; }
+.admin-ui .adm-chip input:focus-visible + span { outline: 2px solid currentColor; outline-offset: 2px; }
+
+/* Imagem */
+.admin-ui .cadastro-campo-imagem { gap: 10px; }
+.admin-ui .cadastro-campo input[type="file"] {
+  padding: 12px;
+  font: inherit;
+  border: 1.5px dashed var(--adm-linha-forte);
+  border-radius: var(--adm-raio-pq);
+  background: var(--adm-suave);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.admin-ui .cadastro-campo input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 16px;
+  font: inherit;
+  font-weight: 600;
+  background: #fff;
+  border: 1px solid var(--adm-linha-forte);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.admin-ui .cadastro-previa {
+  max-width: 200px;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--adm-linha);
+}
+.admin-ui .cadastro-previa[hidden] { display: none; }
+
+/* Ações do formulário */
+.admin-ui .adm-acoes {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 20px;
+  border-top: 1px solid var(--adm-linha);
+}
+
+/* ---------- Produtos já cadastrados (cards) ---------- */
+.admin-ui .cadastro-titulo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.admin-ui .cadastro-titulo h2 { margin: 0; font-size: 1.2rem; }
+.admin-ui .produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 20px;
+}
+.admin-ui .produto-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 16px;
+  background: #fff;
+  border: 1px solid var(--adm-linha);
+  border-radius: var(--adm-raio);
+  box-shadow: var(--adm-sombra);
+  overflow: hidden;
+}
+.admin-ui .produto-card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.admin-ui .produto-card h3 { margin: 8px 14px 0; font-size: 1rem; }
+.admin-ui .produto-card .preco { margin: 0 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.admin-ui .cadastro-acoes-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 8px 14px 0;
+}
+.admin-ui .cadastro-acoes-card form { margin: 0; }
+.admin-ui .cadastro-vazio { padding: 32px 0; text-align: center; opacity: .7; }
+
+/* ---------- Menu lateral: página atual ---------- */
+.admin-ui .sidebar a[aria-current="page"] { font-weight: 700; }
+
+/* ---------- Telas pequenas ---------- */
+@media (max-width: 640px) {
+  .admin-ui .listagem-container,
+  .admin-ui .cadastro-container { padding: 20px 14px 56px; }
+
+  .admin-ui .adm-topo { flex-direction: column; align-items: stretch; }
+  .admin-ui .adm-topo .adm-btn { width: 100%; }
+
+  .admin-ui .listagem-tabela thead { display: none; }
+  .admin-ui .listagem-tabela tbody tr {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    grid-template-areas: "foto nome acoes" "foto preco acoes";
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 2px;
+    padding: 12px 14px;
+  }
+  .admin-ui .listagem-tabela td { padding: 0; border: 0 !important; }
+  .admin-ui .listagem-col-foto { grid-area: foto; width: auto; }
+  .admin-ui .listagem-col-nome { grid-area: nome; }
+  .admin-ui .listagem-col-preco { grid-area: preco; }
+  .admin-ui .listagem-col-acoes { grid-area: acoes; }
+  .admin-ui .listagem-tabela tbody tr.listagem-vazio { display: block; }
+
+  .admin-ui .cadastro-form-box { padding: 20px 16px; }
+  .admin-ui .cadastro-form { grid-template-columns: 1fr; }
+  .admin-ui .adm-c2, .admin-ui .adm-c3, .admin-ui .adm-c4, .admin-ui .adm-c6 { grid-column: 1 / -1; }
+  .admin-ui .adm-acoes { flex-direction: column-reverse; }
+  .admin-ui .adm-acoes .adm-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-ui * { transition: none !important; }
+}
