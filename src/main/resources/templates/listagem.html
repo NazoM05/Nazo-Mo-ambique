@@ -6,9 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS da página principal (mantido) + complemento só da listagem -->
-    <link rel="stylesheet" th:href="@{/homecss.css(v=4)}">
-    <link rel="stylesheet" th:href="@{/listagemcss.css(v=1)}">
+    <!-- CSS global único do site -->
+    <link rel="stylesheet" th:href="@{/global.css(v=1)}">
 
     <title>Listagem de produtos - Estilo London Store</title>
 
@@ -59,36 +58,36 @@
             <table class="listagem-tabela">
                 <thead>
                     <tr>
-                        <th class="col-foto"></th>
+                        <th class="listagem-col-foto"></th>
                         <th>Produto</th>
-                        <th class="col-preco">Preço</th>
-                        <th class="col-acoes">Ações</th>
+                        <th class="listagem-col-preco">Preço</th>
+                        <th class="listagem-col-acoes">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="produto : ${ativos}">
-                        <td class="col-foto">
+                        <td class="listagem-col-foto">
                             <img th:src="${produto.imagem != null} ? @{'/img/' + ${produto.imagem}} : 'https://placehold.co/80x100/ffb6c1/ffffff?text=Sem+foto'"
                                  th:alt="${produto.nome}" alt="Produto">
                         </td>
-                        <td class="col-nome" th:text="${produto.nome}">Nome</td>
-                        <td class="col-preco preco" th:text="${produto.preco}">R$ 0,00</td>
-                        <td class="col-acoes">
+                        <td class="listagem-col-nome" th:text="${produto.nome}">Nome</td>
+                        <td class="listagem-col-preco preco" th:text="${produto.preco}">R$ 0,00</td>
+                        <td class="listagem-col-acoes">
                             <div class="listagem-icones">
                                 <!-- Visualizar -->
-                                <a class="icone" th:href="@{'/detalhes/' + ${produto.id}}"
+                                <a class="listagem-icone" th:href="@{'/detalhes/' + ${produto.id}}"
                                    title="Visualizar" aria-label="Visualizar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </a>
                                 <!-- Editar -->
-                                <a class="icone" th:href="@{'/produtos/' + ${produto.id} + '/editar'}"
+                                <a class="listagem-icone" th:href="@{'/produtos/' + ${produto.id} + '/editar'}"
                                    title="Editar" aria-label="Editar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
                                 </a>
                                 <!-- Inativar -->
                                 <form th:action="@{'/produtos/' + ${produto.id} + '/status'}" method="post">
                                     <input type="hidden" name="status" value="false">
-                                    <button type="submit" class="icone icone-status" title="Inativar" aria-label="Inativar">
+                                    <button type="submit" class="listagem-icone" title="Inativar" aria-label="Inativar">
                                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.4 6.6a9 9 0 11-12.8 0"/><path d="M12 2v10"/></svg>
                                     </button>
                                 </form>
@@ -107,34 +106,34 @@
             <table class="listagem-tabela">
                 <thead>
                     <tr>
-                        <th class="col-foto"></th>
+                        <th class="listagem-col-foto"></th>
                         <th>Produto</th>
-                        <th class="col-preco">Preço</th>
-                        <th class="col-acoes">Ações</th>
+                        <th class="listagem-col-preco">Preço</th>
+                        <th class="listagem-col-acoes">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="produto : ${inativos}" class="linha-inativa">
-                        <td class="col-foto">
+                    <tr th:each="produto : ${inativos}" class="listagem-linha-inativa">
+                        <td class="listagem-col-foto">
                             <img th:src="${produto.imagem != null} ? @{'/img/' + ${produto.imagem}} : 'https://placehold.co/80x100/ffb6c1/ffffff?text=Sem+foto'"
                                  th:alt="${produto.nome}" alt="Produto">
                         </td>
-                        <td class="col-nome" th:text="${produto.nome}">Nome</td>
-                        <td class="col-preco preco" th:text="${produto.preco}">R$ 0,00</td>
-                        <td class="col-acoes">
+                        <td class="listagem-col-nome" th:text="${produto.nome}">Nome</td>
+                        <td class="listagem-col-preco preco" th:text="${produto.preco}">R$ 0,00</td>
+                        <td class="listagem-col-acoes">
                             <div class="listagem-icones">
-                                <a class="icone" th:href="@{'/detalhes/' + ${produto.id}}"
+                                <a class="listagem-icone" th:href="@{'/detalhes/' + ${produto.id}}"
                                    title="Visualizar" aria-label="Visualizar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </a>
-                                <a class="icone" th:href="@{'/produtos/' + ${produto.id} + '/editar'}"
+                                <a class="listagem-icone" th:href="@{'/produtos/' + ${produto.id} + '/editar'}"
                                    title="Editar" aria-label="Editar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
                                 </a>
                                 <!-- Reativar -->
                                 <form th:action="@{'/produtos/' + ${produto.id} + '/status'}" method="post">
                                     <input type="hidden" name="status" value="true">
-                                    <button type="submit" class="icone icone-status" title="Reativar" aria-label="Reativar">
+                                    <button type="submit" class="listagem-icone" title="Reativar" aria-label="Reativar">
                                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
                                     </button>
                                 </form>
@@ -188,7 +187,7 @@
         busca.addEventListener('input', function () {
             var termo = busca.value.toLowerCase();
             document.querySelectorAll('.listagem-tabela tbody tr:not(.listagem-vazio)').forEach(function (linha) {
-                var nome = linha.querySelector('.col-nome').textContent.toLowerCase();
+                var nome = linha.querySelector('.listagem-col-nome').textContent.toLowerCase();
                 linha.style.display = nome.indexOf(termo) === -1 ? 'none' : '';
             });
         });

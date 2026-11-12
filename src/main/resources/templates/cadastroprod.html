@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
  
-    <link rel="stylesheet" th:href="@{/homecss.css(v=4)}">
-    <link rel="stylesheet" th:href="@{/criarprod.css(v=1)}">
+    <link rel="stylesheet" th:href="@{/global.css(v=1)}">
     <title>Cadastro de Produtos - Estilo London Store</title>
     <link rel="icon" type="image/png" href="/Gemini_Generated_Image_kujj8zkujj8zkujj-removebg-preview.png">
 </head>
@@ -29,46 +28,46 @@
         </form>
     </div>
  
-    <main class="admin-container">
+    <main class="cadastro-container">
  
         <!-- Mensagens de retorno -->
-        <div th:if="${sucesso}" class="alerta alerta-ok" th:text="${sucesso}"></div>
-        <div th:if="${erro}" class="alerta alerta-erro" th:text="${erro}"></div>
+        <div th:if="${sucesso}" class="cadastro-alerta cadastro-alerta-ok" th:text="${sucesso}"></div>
+        <div th:if="${erro}" class="cadastro-alerta cadastro-alerta-erro" th:text="${erro}"></div>
  
         <!-- Formulário de cadastro -->
-        <section class="admin-form-box">
+        <section class="cadastro-form-box">
             <h2>Cadastrar novo produto</h2>
  
-            <form th:action="@{/admin/produtos}" method="post" enctype="multipart/form-data" class="admin-form">
+            <form th:action="@{/admin/produtos}" method="post" enctype="multipart/form-data" class="cadastro-form">
  
-                <div class="campo">
+                <div class="cadastro-campo">
                     <label for="nome">Nome do produto</label>
                     <input type="text" id="nome" name="nome" maxlength="120" required>
                 </div>
  
-                <div class="campo">
+                <div class="cadastro-campo">
                     <label for="preco">Preço (R$)</label>
                     <input type="number" id="preco" name="preco" step="0.01" min="0" required>
                 </div>
  
-                <div class="campo campo-imagem">
+                <div class="cadastro-campo cadastro-campo-imagem">
                     <label for="imagem">Imagem</label>
                     <input type="file" id="imagem" name="imagem" accept="image/*">
-                    <img id="previa" class="previa" alt="Prévia da imagem" hidden>
+                    <img id="previa" class="cadastro-previa" alt="Prévia da imagem" hidden>
                 </div>
  
-                <button type="submit" class="btn-comprar btn-salvar">Salvar produto</button>
+                <button type="submit" class="btn-comprar cadastro-btn-salvar">Salvar produto</button>
             </form>
         </section>
  
         <!-- Grid de produtos já cadastrados -->
         <section>
-            <div class="admin-titulo">
+            <div class="cadastro-titulo">
                 <h2>Produtos cadastrados</h2>
-                <span class="contador" th:text="${#lists.size(listaProdutos)} + ' no total'"></span>
+                <span class="cadastro-contador" th:text="${#lists.size(listaProdutos)} + ' no total'"></span>
             </div>
  
-            <p class="vazio" th:if="${#lists.isEmpty(listaProdutos)}">
+            <p class="cadastro-vazio" th:if="${#lists.isEmpty(listaProdutos)}">
                 Nenhum produto cadastrado ainda. Use o formulário acima para adicionar o primeiro.
             </p>
  
@@ -80,12 +79,12 @@
                     <h3 th:text="${produto.nome}"></h3>
                     <p class="preco" th:text="${produto.preco}"></p>
  
-                    <div class="acoes-card">
+                    <div class="cadastro-acoes-card">
                         <a th:href="@{'/detalhes/' + ${produto.id}}" class="btn-comprar">Ver</a>
  
                         <form th:action="@{'/admin/produtos/' + ${produto.id} + '/excluir'}" method="post"
                               onsubmit="return confirm('Excluir este produto?');">
-                            <button type="submit" class="btn-excluir">Excluir</button>
+                            <button type="submit" class="cadastro-btn-excluir">Excluir</button>
                         </form>
                     </div>
                 </div>

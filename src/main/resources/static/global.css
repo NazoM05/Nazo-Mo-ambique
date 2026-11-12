@@ -1,0 +1,885 @@
+/* =====================================================================
+   global.css — folha de estilos única do Estilo London Store
+   Substitui: homecss.css, detalhescss.css, listagemcss.css e criarprod.css.
+
+   Organização:
+     1. Variáveis (cores, tipografia, raios)
+     2. Base / reset
+     3. Componentes compartilhados (barra de anúncios, barra branca,
+        sidebar, overlay, busca, botão, preço)
+     4. Home        (.container-produtos, .produtos-grid, .produto-card)
+     5. Detalhes    (.detalhes-*)
+     6. Listagem    (.listagem-*)
+     7. Cadastro    (.cadastro-*; reaproveita .produtos-grid/.produto-card da home)
+   Regra de nomes: classes de página levam o prefixo da página
+   (detalhes-, listagem-, cadastro-) para nunca colidirem com as das outras telas.
+   ===================================================================== */
+
+
+/* ---------- 1. Variáveis ---------- */
+:root {
+    /* Paleta */
+    --cor-fundo: lightpink;
+    --cor-rosa: #ffb6c1;
+    --cor-rosa-suave: #ffe9ee;
+    --cor-rosa-forte: #d6577a;
+    --cor-borda-rosa: #f1d5dd;
+    --cor-superficie: #ffffff;
+    --cor-superficie-2: #fafafa;
+    --cor-hover: #f5f5f5;
+    --cor-borda: #ddd;
+    --cor-borda-input: #ccc;
+    --cor-borda-leve: #e5e5e5;
+    --cor-anuncio: #111;
+    --cor-sucesso: #1a9e55;
+    --cor-perigo: #c0392b;
+    --cor-ok-fundo: #e8f7ee;
+    --cor-ok-texto: #1e7a45;
+    --cor-erro-fundo: #fdecea;
+    --cor-erro-texto: #b03a2e;
+
+    /* Textos */
+    --cor-texto: #333;
+    --cor-texto-2: #555;
+    --cor-texto-suave: #777;
+    --cor-texto-mudo: #999;
+    --cor-texto-lista: #444;
+
+    /* Botão escuro padrão */
+    --cor-botao: #333;
+    --cor-botao-hover: #555;
+
+    /* Tipografia */
+    --fonte-base: sans-serif;
+
+    /* Raios */
+    --raio-sm: 4px;
+    --raio-md: 6px;
+    --raio-lg: 8px;
+    --raio-xl: 12px;
+}
+
+
+/* ---------- 2. Base / reset ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--fonte-base);
+}
+
+body {
+    background-color: var(--cor-fundo);
+}
+
+
+/* ---------- 3. Componentes compartilhados ---------- */
+
+/* Barra de anúncios (alterna as mensagens) */
+.barra-anuncios {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background-color: var(--cor-anuncio);
+    color: #fff;
+    overflow: hidden;
+}
+
+.barra-anuncios .anuncio {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+}
+
+.barra-anuncios .anuncio.ativo {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Barra branca com menu e busca */
+.barrabranca {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--cor-superficie);
+    width: 100%;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 990;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-btn {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.menu-btn span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--cor-texto);
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.search-form {
+    display: flex;
+    gap: 5px;
+}
+
+.search-form input {
+    padding: 8px 12px;
+    border: 1px solid var(--cor-borda-input);
+    border-radius: var(--raio-sm);
+    outline: none;
+}
+
+.search-form button {
+    padding: 8px 15px;
+    background-color: var(--cor-botao);
+    color: #fff;
+    border: none;
+    border-radius: var(--raio-sm);
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: var(--cor-botao-hover);
+}
+
+/* Sidebar + overlay */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -270px;
+    width: 250px;
+    height: 100vh;
+    background-color: var(--cor-superficie);
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    transition: left 0.3s ease;
+    padding-top: 80px;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 15px 25px;
+    color: var(--cor-texto);
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.sidebar nav a:hover {
+    background-color: var(--cor-hover);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 998;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Preço e botão principal (usados em home, detalhes e listagem) */
+.preco {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--cor-texto);
+    margin-bottom: 15px;
+}
+
+.btn-comprar {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--cor-botao);
+    color: #fff;
+    border: none;
+    border-radius: var(--raio-sm);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-comprar:hover {
+    background-color: var(--cor-botao-hover);
+}
+
+.btn-secundario {
+    background-color: var(--cor-rosa-suave);
+    color: var(--cor-rosa-forte);
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-rosa);
+}
+
+
+/* ---------- 4. Home ---------- */
+.container-produtos {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.produto-card {
+    background-color: var(--cor-superficie);
+    border-radius: var(--raio-lg);
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.produto-card:hover {
+    transform: translateY(-5px);
+}
+
+.produto-card h3 {
+    font-size: 18px;
+    color: var(--cor-texto);
+    margin-bottom: 10px;
+}
+
+.produto-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--raio-md);
+    margin-bottom: 15px;
+}
+
+/* Troca de imagem ao passar o mouse (reservado; não usado nos templates atuais) */
+.imagem-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    margin-bottom: 15px;
+    border-radius: var(--raio-md);
+    overflow: hidden;
+}
+
+.imagem-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.img-hover {
+    opacity: 0;
+}
+
+.produto-card:hover .img-hover {
+    opacity: 1;
+}
+
+.produto-card:hover .img-default {
+    opacity: 0;
+}
+
+
+/* ---------- 5. Detalhes ---------- */
+.detalhes-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 16px;
+}
+
+.detalhes-voltar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: var(--cor-texto-suave);
+}
+
+.detalhes-voltar a {
+    color: var(--cor-rosa-forte);
+    text-decoration: none;
+}
+
+/* --cor-produto é definida no HTML a partir da coluna "cor" do banco */
+.detalhes-box {
+    --cor-produto: var(--cor-borda);
+    display: grid;
+    grid-template-columns: 70px minmax(280px, 1fr) minmax(260px, 1fr) 280px;
+    gap: 24px;
+    background: var(--cor-superficie);
+    border-radius: var(--raio-lg);
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Miniaturas */
+.detalhes-miniaturas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detalhes-miniaturas img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background: var(--cor-superficie-2);
+    border: 2px solid var(--cor-borda);
+    border-radius: var(--raio-md);
+    cursor: pointer;
+}
+
+.detalhes-miniaturas img.ativa {
+    border-color: var(--cor-rosa);
+}
+
+/* Imagem principal (a faixa inferior usa a cor do produto) */
+.detalhes-imagem {
+    background: var(--cor-superficie-2);
+    border-radius: var(--raio-lg);
+    border-bottom: 4px solid var(--cor-produto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.detalhes-imagem img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--raio-md);
+}
+
+/* Informações */
+.detalhes-status {
+    font-size: 13px;
+    color: var(--cor-texto-suave);
+    margin-bottom: 8px;
+}
+
+.detalhes-titulo {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.detalhes-avaliacao {
+    font-size: 14px;
+    color: var(--cor-texto-2);
+    margin-bottom: 12px;
+}
+
+.preco-antigo {
+    text-decoration: line-through;
+    color: var(--cor-texto-mudo);
+    font-size: 14px;
+}
+
+.detalhes-preco {
+    font-size: 32px;
+    margin: 4px 0;
+}
+
+.detalhes-pagamento {
+    font-size: 14px;
+    color: var(--cor-texto-2);
+    margin-bottom: 16px;
+}
+
+.detalhes-opcao {
+    margin: 12px 0 6px;
+    font-size: 15px;
+}
+
+/* Cor do produto: amostra + nome */
+.detalhes-cor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detalhes-cor-amostra {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--cor-produto);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.detalhes-tamanhos {
+    display: flex;
+    gap: 8px;
+}
+
+.detalhes-tamanhos button {
+    min-width: 44px;
+    padding: 8px 12px;
+    background: var(--cor-superficie);
+    border: 2px solid var(--cor-borda);
+    border-radius: var(--raio-md);
+    cursor: pointer;
+}
+
+.detalhes-tamanhos button.ativo {
+    border-color: var(--cor-rosa);
+    background: var(--cor-rosa-suave);
+}
+
+.detalhes-subtitulo {
+    font-size: 16px;
+    margin: 24px 0 8px;
+}
+
+.detalhes-lista {
+    padding-left: 18px;
+    color: var(--cor-texto-lista);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Caixa de compra */
+.detalhes-compra {
+    border: 1px solid var(--cor-borda-leve);
+    border-radius: var(--raio-lg);
+    padding: 20px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.detalhes-frete strong {
+    color: var(--cor-sucesso);
+}
+
+.detalhes-estoque {
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.detalhes-compra select {
+    padding: 8px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-md);
+}
+
+.detalhes-vendedor {
+    color: var(--cor-texto-2);
+    margin-top: 6px;
+}
+
+
+/* ---------- 6. Listagem ---------- */
+.listagem-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 12px;
+}
+
+/* Abas */
+.listagem-abas {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--cor-borda-rosa);
+    margin-bottom: 8px;
+}
+
+.listagem-aba {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    padding: 10px 14px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--cor-texto-suave);
+    cursor: pointer;
+}
+
+.listagem-aba:hover {
+    color: var(--cor-texto);
+}
+
+.listagem-aba.ativa {
+    color: var(--cor-texto);
+    border-bottom-color: var(--cor-rosa);
+}
+
+.listagem-aba:focus-visible,
+.listagem-icone:focus-visible {
+    outline: 2px solid var(--cor-rosa);
+    outline-offset: 2px;
+}
+
+.listagem-contador {
+    display: inline-block;
+    min-width: 22px;
+    margin-left: 4px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--cor-rosa-suave);
+    color: var(--cor-texto);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Painéis */
+.listagem-painel {
+    display: none;
+}
+
+.listagem-painel.ativo {
+    display: block;
+}
+
+/* Tabela */
+.listagem-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: var(--cor-texto);
+}
+
+.listagem-tabela th {
+    padding: 6px 8px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cor-texto-suave);
+    border-bottom: 1px solid var(--cor-borda-rosa);
+}
+
+.listagem-tabela td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--cor-borda-rosa);
+    vertical-align: middle;
+}
+
+.listagem-tabela tbody tr:hover {
+    background: var(--cor-rosa-suave);
+}
+
+.listagem-col-foto {
+    width: 44px;
+}
+
+.listagem-col-foto img {
+    display: block;
+    width: 32px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: var(--raio-sm);
+}
+
+.listagem-col-nome {
+    font-weight: 500;
+}
+
+.listagem-col-preco {
+    width: 110px;
+    white-space: nowrap;
+}
+
+/* .preco da home é grande: na tabela ele fica compacto */
+.listagem-tabela .preco {
+    margin: 0;
+    font-size: 14px;
+}
+
+.listagem-col-acoes {
+    width: 120px;
+    text-align: right;
+}
+
+.listagem-linha-inativa .listagem-col-nome,
+.listagem-linha-inativa .listagem-col-preco,
+.listagem-linha-inativa .listagem-col-foto img {
+    opacity: 0.55;
+}
+
+.listagem-vazio td {
+    padding: 24px 8px;
+    text-align: center;
+    color: var(--cor-texto-suave);
+}
+
+/* Ícones de ação */
+.listagem-icones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2px;
+}
+
+.listagem-icones form {
+    margin: 0;
+}
+
+.listagem-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--raio-md);
+    background: none;
+    color: var(--cor-texto-suave);
+    cursor: pointer;
+}
+
+.listagem-icone:hover {
+    background: var(--cor-rosa-suave);
+    color: var(--cor-texto);
+}
+
+.listagem-icone svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* ---------- 7. Cadastro de produtos ---------- */
+.cadastro-container {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px 48px;
+}
+
+.cadastro-form-box {
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda-rosa);
+    border-radius: var(--raio-xl);
+    padding: 20px;
+    margin-bottom: 32px;
+}
+
+.cadastro-form-box h2,
+.cadastro-titulo h2 {
+    margin: 0 0 16px;
+    font-size: 1.25rem;
+}
+
+.cadastro-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+
+.cadastro-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cadastro-campo label {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.cadastro-campo input[type="text"],
+.cadastro-campo input[type="number"],
+.cadastro-campo input[type="file"] {
+    padding: 10px 12px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-lg);
+    font-size: 1rem;
+    background: var(--cor-superficie);
+}
+
+.cadastro-campo input:focus-visible {
+    outline: 2px solid var(--cor-rosa);
+    outline-offset: 1px;
+}
+
+.cadastro-campo-imagem,
+.cadastro-btn-salvar {
+    grid-column: 1 / -1;
+}
+
+.cadastro-previa {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: var(--raio-lg);
+    border: 1px solid var(--cor-borda-rosa);
+}
+
+.cadastro-btn-salvar {
+    justify-self: start;
+}
+
+.cadastro-titulo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.cadastro-contador {
+    font-size: 0.9rem;
+    color: var(--cor-texto-suave);
+}
+
+.cadastro-vazio {
+    padding: 24px;
+    text-align: center;
+    color: var(--cor-texto-suave);
+    border: 1px dashed var(--cor-borda-rosa);
+    border-radius: var(--raio-xl);
+}
+
+.cadastro-acoes-card {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.cadastro-acoes-card a.btn-comprar {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cadastro-btn-excluir {
+    padding: 8px 14px;
+    border: 1px solid var(--cor-perigo);
+    background: var(--cor-superficie);
+    color: var(--cor-perigo);
+    border-radius: var(--raio-md);
+    cursor: pointer;
+}
+
+.cadastro-btn-excluir:hover,
+.cadastro-btn-excluir:focus-visible {
+    background: var(--cor-perigo);
+    color: #fff;
+}
+
+.cadastro-alerta {
+    padding: 12px 16px;
+    border-radius: var(--raio-lg);
+    margin-bottom: 16px;
+}
+
+.cadastro-alerta-ok {
+    background: var(--cor-ok-fundo);
+    color: var(--cor-ok-texto);
+}
+
+.cadastro-alerta-erro {
+    background: var(--cor-erro-fundo);
+    color: var(--cor-erro-texto);
+}
+
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 1000px) {
+    .detalhes-box {
+        grid-template-columns: 70px 1fr;
+    }
+
+    .detalhes-info,
+    .detalhes-compra {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 600px) {
+    .barra-anuncios .anuncio {
+        font-size: 12px;
+    }
+
+    .detalhes-box {
+        grid-template-columns: 1fr;
+        padding: 14px;
+    }
+
+    .detalhes-miniaturas {
+        flex-direction: row;
+        order: 2;
+    }
+
+    .detalhes-miniaturas img {
+        width: 60px;
+    }
+
+    .listagem-tabela {
+        font-size: 13px;
+    }
+
+    .listagem-col-preco {
+        width: 80px;
+    }
+
+    .listagem-col-acoes {
+        width: 96px;
+    }
+
+    .cadastro-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .barra-anuncios .anuncio {
+        transition: none;
+    }
+}
