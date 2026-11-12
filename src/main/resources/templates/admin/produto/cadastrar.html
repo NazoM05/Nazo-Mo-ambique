@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <link rel="stylesheet" th:href="@{/global.css(v=1)}">
+    <!-- Ajustes de layout e usabilidade das telas de administração -->
+    <link rel="stylesheet" th:href="@{/admin.css(v=1)}">
+    <title>Cadastro de Produtos - Estilo London Store</title>
+    <link rel="icon" type="image/png" href="/Gemini_Generated_Image_kujj8zkujj8zkujj-removebg-preview.png">
+</head>
+ 
+<body class="admin-ui">
+ 
+    <!-- Barra de anúncios -->
+    <div th:replace="~{fragments/anuncios :: anuncios}"></div>
+ 
+    <!-- Barra branca com menu e busca -->
+    <div class="barrabranca">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+ 
+        <form class="search-form" onsubmit="return false;">
+            <input type="text" id="filtro" placeholder="Pesquisar produto cadastrado...">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+ 
+    <main class="cadastro-container">
+ 
+        <!-- Mensagens de retorno -->
+        <div th:if="${sucesso}" class="cadastro-alerta cadastro-alerta-ok" role="status" th:text="${sucesso}"></div>
+        <div th:if="${erro}" class="cadastro-alerta cadastro-alerta-erro" role="alert" th:text="${erro}"></div>
+ 
+        <a class="adm-voltar" th:href="@{/admin/produto/listar}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            Voltar para produtos
+        </a>
+
+        <!-- Formulário de cadastro -->
+        <section class="cadastro-form-box">
+            <h2>Novo produto</h2>
+
+            <form th:action="@{/admin/produto/salvar}" method="post" enctype="multipart/form-data" class="cadastro-form">
+
+                <div class="cadastro-campo adm-c4">
+                    <label for="nome">Nome do produto</label>
+                    <input type="text" id="nome" name="nome" maxlength="120" required autofocus>
+                </div>
+
+                <div class="cadastro-campo adm-c2">
+                    <label for="preco">Preço</label>
+                    <div class="adm-prefixo">
+                        <span aria-hidden="true">R$</span>
+                        <input type="number" id="preco" name="preco" step="0.01" min="0" inputmode="decimal" placeholder="0,00" required>
+                    </div>
+                </div>
+
+                <div class="cadastro-campo adm-c3">
+                    <label for="cor">Cor</label>
+                    <input type="text" id="cor" name="cor" maxlength="50" placeholder="Ex.: Rosa claro">
+                </div>
+
+                <div class="cadastro-campo adm-c3">
+                    <label for="tipo">Tipo</label>
+                    <input type="text" id="tipo" name="tipo" placeholder="Ex.: Camisa">
+                </div>
+
+                <div class="cadastro-campo adm-c6">
+                    <span class="adm-rotulo" id="rotuloTamanhos">Tamanhos disponíveis</span>
+                    <p class="adm-ajuda">Marque todos os tamanhos que você tem para este produto.</p>
+                    <div class="adm-chips" role="group" aria-labelledby="rotuloTamanhos"
+                         th:with="tamanhos=${'PP,P,M,G,GG,XG,Único'.split(',')}">
+                        <label th:each="t : ${tamanhos}" class="adm-chip">
+                            <input type="checkbox" name="tamanho" th:value="${t}">
+                            <span th:text="${t}"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="cadastro-campo cadastro-campo-imagem adm-c6">
+                    <label for="imagem">Imagem</label>
+                    <input type="file" id="imagem" name="arquivoImagem" accept="image/*">
+                    <img id="previa" class="cadastro-previa" alt="Prévia da imagem" hidden>
+                </div>
+
+                <div class="adm-acoes">
+                    <a th:href="@{/admin/produto/listar}" class="adm-btn adm-btn-sec">Cancelar</a>
+                    <button type="submit" class="btn-comprar cadastro-btn-salvar adm-btn">Salvar produto</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Grid de produtos já cadastrados -->
+        <section>
+            <div class="cadastro-titulo">
+                <h2>Produtos cadastrados</h2>
+                <span class="cadastro-contador" th:text="${#lists.size(listaProdutos)} + ' no total'"></span>
+            </div>
+ 
+            <p class="cadastro-vazio" th:if="${#lists.isEmpty(listaProdutos)}">
+                Nenhum produto cadastrado ainda. Use o formulário acima para adicionar o primeiro.
+            </p>
+ 
+            <div class="produtos-grid" id="gridProdutos">
+                <div th:each="produto : ${listaProdutos}" class="produto-card" th:attr="data-nome=${#strings.toLowerCase(produto.nome)}">
+                    <img th:src="${produto.imagem != null} ? @{'/img/' + ${produto.imagem}} : 'https://placehold.co/400x500/ffb6c1/ffffff?text=Sem+foto'"
+                         th:alt="${produto.nome}" alt="Produto" loading="lazy">
+ 
+                    <h3 th:text="${produto.nome}"></h3>
+                    <p class="preco" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}"></p>
+ 
+                    <div class="cadastro-acoes-card">
+                        <a th:href="@{'/detalhes/' + ${produto.id}}" class="btn-comprar adm-btn adm-btn-pq">Ver</a>
+                        <a th:href="@{'/admin/produto/editar/' + ${produto.id}}" class="adm-btn adm-btn-sec adm-btn-pq">Editar</a>
+ 
+                        <form th:action="@{'/admin/produtos/' + ${produto.id} + '/excluir'}" method="post"
+                              onsubmit="return confirm('Excluir este produto?');">
+                            <button type="submit" class="cadastro-btn-excluir adm-btn adm-btn-pq">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+ 
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <a th:href="@{/home}">Início</a>
+            <a th:href="@{/admin/produto/listar}">Produtos</a>
+            <a th:href="@{/admin/produto/cadastrar}" aria-current="page">Novo produto</a>
+            <a href="#">Configurações</a>
+            <a th:href="@{/logout}">Sair</a>
+        </nav>
+    </div>
+    <div class="overlay" id="overlay"></div>
+ 
+    <script th:src="@{/jshome.js(v=4)}"></script>
+    <script>
+        // Filtra os cards já cadastrados pela barra de pesquisa
+        const filtro = document.getElementById('filtro');
+        filtro.addEventListener('input', () => {
+            const termo = filtro.value.trim().toLowerCase();
+            document.querySelectorAll('#gridProdutos .produto-card').forEach(card => {
+                card.style.display = card.dataset.nome.includes(termo) ? '' : 'none';
+            });
+        });
+ 
+        // Aviso de sucesso some sozinho
+        const ok = document.querySelector('.cadastro-alerta-ok');
+        if (ok) {
+            setTimeout(() => {
+                ok.style.transition = 'opacity .4s';
+                ok.style.opacity = '0';
+                setTimeout(() => ok.remove(), 400);
+            }, 5000);
+        }
+
+        // Prévia da imagem escolhida
+        const input = document.getElementById('imagem');
+        const previa = document.getElementById('previa');
+        input.addEventListener('change', () => {
+            const arquivo = input.files[0];
+            if (!arquivo) { previa.hidden = true; return; }
+            previa.src = URL.createObjectURL(arquivo);
+            previa.hidden = false;
+        });
+    </script>
+</body>
+</html>

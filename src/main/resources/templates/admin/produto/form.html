@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/global.css(v=1)}">
+    <!-- Ajustes de layout e usabilidade das telas de administração -->
+    <link rel="stylesheet" th:href="@{/admin.css(v=1)}">
+    <title>Editar produto - Estilo London Store</title>
+    <link rel="icon" type="image/png" href="/Gemini_Generated_Image_kujj8zkujj8zkujj-removebg-preview.png">
+</head>
+
+<body class="admin-ui">
+
+    <!-- Barra de anúncios -->
+    <div th:replace="~{fragments/anuncios :: anuncios}"></div>
+
+    <!-- Barra branca com menu -->
+    <div class="barrabranca">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+
+    <main class="cadastro-container">
+
+        <a class="adm-voltar" th:href="@{/admin/produto/listar}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            Voltar para produtos
+        </a>
+
+        <section class="cadastro-form-box">
+            <h2>Editar produto</h2>
+
+            <!-- Envia para AdminController: POST /admin/produto/salvar -->
+            <form th:action="@{/admin/produto/salvar}" th:object="${produto}" method="post" enctype="multipart/form-data" class="cadastro-form">
+
+                <!-- Campos preservados: sem o id o Spring criaria um produto novo -->
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{imagem}">
+
+                <div class="cadastro-campo adm-c4">
+                    <label for="nome">Nome do produto</label>
+                    <input type="text" id="nome" th:field="*{nome}" maxlength="120" required>
+                </div>
+
+                <div class="cadastro-campo adm-c2">
+                    <label for="preco">Preço</label>
+                    <div class="adm-prefixo">
+                        <span aria-hidden="true">R$</span>
+                        <input type="number" id="preco" th:field="*{preco}" step="0.01" min="0" inputmode="decimal" required>
+                    </div>
+                </div>
+
+                <div class="cadastro-campo adm-c3">
+                    <label for="cor">Cor</label>
+                    <input type="text" id="cor" th:field="*{cor}" maxlength="50">
+                </div>
+
+                <div class="cadastro-campo adm-c3">
+                    <label for="tipo">Tipo</label>
+                    <input type="text" id="tipo" th:field="*{tipo}">
+                </div>
+
+                <div class="cadastro-campo adm-c3">
+                    <label for="tamanhoDisponivel">Tamanhos disponíveis</label>
+                    <!-- Guarda a lista completa (ex.: "P,M,G") para não perder tamanhos ao salvar -->
+                    <input type="hidden" th:field="*{tamanho}">
+                    <select id="tamanhoDisponivel">
+                        <option th:each="t : ${produto.tamanhosDisponiveis}" th:value="${t}" th:text="${t}"></option>
+                        <option th:if="${#lists.isEmpty(produto.tamanhosDisponiveis)}" value="">Nenhum tamanho cadastrado</option>
+                    </select>
+                </div>
+
+                <div class="cadastro-campo adm-c3">
+                    <span class="adm-rotulo" id="rotuloStatus">Situação</span>
+                    <div class="adm-chips" role="radiogroup" aria-labelledby="rotuloStatus">
+                        <label class="adm-chip">
+                            <input type="radio" th:field="*{status}" value="true">
+                            <span>Ativo</span>
+                        </label>
+                        <label class="adm-chip">
+                            <input type="radio" th:field="*{status}" value="false">
+                            <span>Inativo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="cadastro-campo cadastro-campo-imagem adm-c6">
+                    <span class="adm-rotulo" id="rotuloImagem">Imagem</span>
+                    <img id="imagemAtual" class="cadastro-previa" alt="Imagem do produto"
+                         th:src="*{imagem != null} ? @{'/img/' + *{imagem}} : 'https://placehold.co/400x500/ffb6c1/ffffff?text=Sem+foto'">
+                    <label for="arquivoImagem" class="adm-ajuda">Para trocar a imagem, escolha um novo arquivo (opcional).</label>
+                    <input type="file" id="arquivoImagem" name="arquivoImagem" accept="image/*">
+                </div>
+
+                <div class="adm-acoes">
+                    <a th:href="@{/admin/produto/listar}" class="adm-btn adm-btn-sec">Cancelar</a>
+                    <button type="submit" class="btn-comprar cadastro-btn-salvar adm-btn">Salvar alterações</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <a th:href="@{/home}">Início</a>
+            <a th:href="@{/admin/produto/listar}" aria-current="page">Produtos</a>
+            <a th:href="@{/admin/produto/cadastrar}">Novo produto</a>
+            <a href="#">Configurações</a>
+            <a th:href="@{/logout}">Sair</a>
+        </nav>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <script th:src="@{/jshome.js(v=4)}"></script>
+    <script>
+        // Mostra a nova imagem escolhida no lugar da atual, antes de salvar
+        const entrada = document.getElementById('arquivoImagem');
+        const atual = document.getElementById('imagemAtual');
+        entrada.addEventListener('change', () => {
+            const arquivo = entrada.files[0];
+            if (arquivo) { atual.src = URL.createObjectURL(arquivo); }
+        });
+    </script>
+</body>
+</html>

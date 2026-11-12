@@ -8,6 +8,8 @@
 
     <!-- CSS global único do site -->
     <link rel="stylesheet" th:href="@{/global.css(v=1)}">
+    <!-- Ajustes de layout e usabilidade das telas de administração -->
+    <link rel="stylesheet" th:href="@{/admin.css(v=1)}">
 
     <title>Listagem de produtos - Estilo London Store</title>
 
@@ -15,14 +17,14 @@
 </head>
 
 
-<body>
+<body class="admin-ui">
 
     <!-- Barra de anúncios (a mesma da home) -->
     <div th:replace="~{fragments/anuncios :: anuncios}"></div>
 
     <!-- Mesma barra branca da home -->
     <div class="barrabranca">
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">
             <span></span>
             <span></span>
             <span></span>
@@ -40,6 +42,21 @@
     <main class="listagem-container"
           th:with="ativos=${listaProdutos.?[status != null and status.toString() == 'true']},
                    inativos=${listaProdutos.?[status != null and status.toString() == 'false']}">
+
+        <!-- Mensagens de retorno do AdminController (?sucesso / ?erro=...) -->
+        <div th:if="${param.sucesso != null}" class="cadastro-alerta cadastro-alerta-ok" role="status">Alteração salva com sucesso.</div>
+        <div th:if="${param.erro != null}" class="cadastro-alerta cadastro-alerta-erro" role="alert"
+             th:text="${param.erro[0] == 'naoEncontrado'} ? 'Produto não encontrado.' : 'Não foi possível salvar. Verifique se já existe um produto com o mesmo nome (veja o console para detalhes).'"></div>
+
+        <!-- Título da página + botão para a tela de cadastro (AdminController: GET /admin/produto/cadastrar) -->
+        <header class="adm-topo">
+            <div>
+                <h1 class="adm-titulo">Produtos</h1>
+                <p class="adm-sub"
+                   th:text="${listaProdutos.size() == 1} ? '1 produto cadastrado' : ${listaProdutos.size()} + ' produtos cadastrados'">0 produtos cadastrados</p>
+            </div>
+            <a class="btn-comprar adm-btn" th:href="@{/admin/produto/cadastrar}">+ Novo produto</a>
+        </header>
 
         <!-- Abas -->
         <div class="listagem-abas" role="tablist">
@@ -68,10 +85,10 @@
                     <tr th:each="produto : ${ativos}">
                         <td class="listagem-col-foto">
                             <img th:src="${produto.imagem != null} ? @{'/img/' + ${produto.imagem}} : 'https://placehold.co/80x100/ffb6c1/ffffff?text=Sem+foto'"
-                                 th:alt="${produto.nome}" alt="Produto">
+                                 th:alt="${produto.nome}" alt="Produto" width="56" height="70" loading="lazy">
                         </td>
                         <td class="listagem-col-nome" th:text="${produto.nome}">Nome</td>
-                        <td class="listagem-col-preco preco" th:text="${produto.preco}">R$ 0,00</td>
+                        <td class="listagem-col-preco preco" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">R$ 0,00</td>
                         <td class="listagem-col-acoes">
                             <div class="listagem-icones">
                                 <!-- Visualizar -->
@@ -80,12 +97,12 @@
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </a>
                                 <!-- Editar -->
-                                <a class="listagem-icone" th:href="@{'/produtos/' + ${produto.id} + '/editar'}"
+                                <a class="listagem-icone" th:href="@{'/admin/produto/editar/' + ${produto.id}}"
                                    title="Editar" aria-label="Editar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
                                 </a>
                                 <!-- Inativar -->
-                                <form th:action="@{'/produtos/' + ${produto.id} + '/status'}" method="post">
+                                <form th:action="@{'/admin/produto/status/' + ${produto.id}}" method="post">
                                     <input type="hidden" name="status" value="false">
                                     <button type="submit" class="listagem-icone" title="Inativar" aria-label="Inativar">
                                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.4 6.6a9 9 0 11-12.8 0"/><path d="M12 2v10"/></svg>
@@ -95,7 +112,7 @@
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(ativos)}" class="listagem-vazio">
-                        <td colspan="4">Nenhum item ativo.</td>
+                        <td colspan="4">Nenhum item ativo. Cadastre um produto em “Novo produto”.</td>
                     </tr>
                 </tbody>
             </table>
@@ -116,22 +133,22 @@
                     <tr th:each="produto : ${inativos}" class="listagem-linha-inativa">
                         <td class="listagem-col-foto">
                             <img th:src="${produto.imagem != null} ? @{'/img/' + ${produto.imagem}} : 'https://placehold.co/80x100/ffb6c1/ffffff?text=Sem+foto'"
-                                 th:alt="${produto.nome}" alt="Produto">
+                                 th:alt="${produto.nome}" alt="Produto" width="56" height="70" loading="lazy">
                         </td>
                         <td class="listagem-col-nome" th:text="${produto.nome}">Nome</td>
-                        <td class="listagem-col-preco preco" th:text="${produto.preco}">R$ 0,00</td>
+                        <td class="listagem-col-preco preco" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">R$ 0,00</td>
                         <td class="listagem-col-acoes">
                             <div class="listagem-icones">
                                 <a class="listagem-icone" th:href="@{'/detalhes/' + ${produto.id}}"
                                    title="Visualizar" aria-label="Visualizar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </a>
-                                <a class="listagem-icone" th:href="@{'/produtos/' + ${produto.id} + '/editar'}"
+                                <a class="listagem-icone" th:href="@{'/admin/produto/editar/' + ${produto.id}}"
                                    title="Editar" aria-label="Editar">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
                                 </a>
                                 <!-- Reativar -->
-                                <form th:action="@{'/produtos/' + ${produto.id} + '/status'}" method="post">
+                                <form th:action="@{'/admin/produto/status/' + ${produto.id}}" method="post">
                                     <input type="hidden" name="status" value="true">
                                     <button type="submit" class="listagem-icone" title="Reativar" aria-label="Reativar">
                                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -141,21 +158,24 @@
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(inativos)}" class="listagem-vazio">
-                        <td colspan="4">Nenhum item inativo.</td>
+                        <td colspan="4">Nenhum item inativo. Produtos inativados aparecem aqui e podem ser reativados.</td>
                     </tr>
                 </tbody>
             </table>
         </section>
+
+        <p class="adm-sem-resultado" id="semResultados" role="status" hidden></p>
 
     </main>
 
     <!-- Mesma sidebar e overlay da home -->
     <div class="sidebar" id="sidebar">
         <nav>
-            <a th:href="@{/}">Início</a>
-            <a href="#">Perfil</a>
+            <a th:href="@{/home}">Início</a>
+            <a th:href="@{/admin/produto/listar}" aria-current="page">Produtos</a>
+            <a th:href="@{/admin/produto/cadastrar}">Novo produto</a>
             <a href="#">Configurações</a>
-            <a href="#">Sair</a>
+            <a th:href="@{/logout}">Sair</a>
         </nav>
     </div>
 
@@ -163,10 +183,12 @@
 
     <script th:src="@{/jshome.js(v=4)}"></script>
 
-    <!-- Alterna as abas e filtra as linhas pela busca -->
+    <!-- Alterna as abas, filtra as linhas pela busca e cuida dos avisos -->
     <script>
         var abas = document.querySelectorAll('.listagem-aba');
         var paineis = document.querySelectorAll('.listagem-painel');
+        var busca = document.getElementById('filtroBusca');
+        var semResultados = document.getElementById('semResultados');
 
         abas.forEach(function (aba) {
             aba.addEventListener('click', function () {
@@ -178,19 +200,44 @@
                 aba.classList.add('ativa');
                 aba.setAttribute('aria-selected', 'true');
                 document.getElementById(aba.dataset.alvo).classList.add('ativo');
+                filtrar();
             });
         });
 
         // Busca simples por nome, sem recarregar a página
-        var busca = document.getElementById('filtroBusca');
-        busca.closest('form').addEventListener('submit', function (e) { e.preventDefault(); });
-        busca.addEventListener('input', function () {
-            var termo = busca.value.toLowerCase();
+        function filtrar() {
+            var termo = busca.value.trim().toLowerCase();
             document.querySelectorAll('.listagem-tabela tbody tr:not(.listagem-vazio)').forEach(function (linha) {
                 var nome = linha.querySelector('.listagem-col-nome').textContent.toLowerCase();
                 linha.style.display = nome.indexOf(termo) === -1 ? 'none' : '';
             });
-        });
+
+            // Avisa quando a busca não encontra nada na aba aberta
+            var painel = document.querySelector('.listagem-painel.ativo');
+            var linhas = painel.querySelectorAll('tbody tr:not(.listagem-vazio)');
+            var visiveis = Array.prototype.filter.call(linhas, function (l) { return l.style.display !== 'none'; });
+            if (termo && linhas.length > 0 && visiveis.length === 0) {
+                semResultados.textContent = 'Nenhum produto encontrado para “' + busca.value.trim() + '”.';
+                semResultados.hidden = false;
+            } else {
+                semResultados.hidden = true;
+            }
+        }
+        busca.closest('form').addEventListener('submit', function (e) { e.preventDefault(); });
+        busca.addEventListener('input', filtrar);
+
+        // Aviso de sucesso some sozinho; a URL é limpa para não repetir o aviso ao atualizar
+        if (document.querySelector('.cadastro-alerta') && window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname);
+        }
+        var ok = document.querySelector('.cadastro-alerta-ok');
+        if (ok) {
+            setTimeout(function () {
+                ok.style.transition = 'opacity .4s';
+                ok.style.opacity = '0';
+                setTimeout(function () { ok.remove(); }, 400);
+            }, 5000);
+        }
     </script>
 
 </body>
